@@ -1,30 +1,26 @@
-const express = require('express');
-const Resources = require('./model');
+const router = require('express').Router();
+const {checkResourceBody} = require('./middleware');
+const Resource = require('./model');
 
-const router = express.Router();
+router.get('/', async (req, res, next) => {
+  try {
+    const resources = await Resource.getAll();
+    res.json(resources);
+  } catch(err) { next(err) }
+});
 
-router.get('/', (_, res, next) => {
-    Resources.getAll()
-        .then(resources => {
-            res.status(200).json(resources)
-        })
-        .catch(err => next(err))
-})
+router.post('/', checkResourceBody, async (req, res, next) => {
+  try {
+    const resource = await Resource.create(req.body);
+    res.json(resource);
+  } catch(err) { next(err) }
+});
 
-router.get('/:id', (req, res, next) => {
-    Resources.getById(req.params.id)
-        .then(resource => {
-            res.status(200).json(resource)
-        })
-        .catch(err => next(err))
-})
-
-router.post('/', (req, res, next) => {
-    Resources.createResource(req.body)
-        .then(newResource => {
-            res.status(201).json(newResource)
-        })
-        .catch(err => next(err))
-})
+router.use((err, req, res, next) => { // eslint-disable-line
+  res.status(500).json({
+    error: err.message,
+    stack: err.stack,
+  })
+});
 
 module.exports = router;

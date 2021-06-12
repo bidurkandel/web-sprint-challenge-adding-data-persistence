@@ -1,7 +1,12 @@
-exports.seed = function(knex, Promise) {
-    return knex("projects").insert([
-        { project_name: 'Web API', project_description: 'Build APIs' },
-        { project_name: 'Databases', project_description: 'Learn SQL', project_completed: 1 },
-        { project_name: 'Authentication' }
-    ])
+
+exports.seed = function(knex) {
+  // Deletes ALL existing entries
+  return knex('projects').truncate()
+    .then(function () {
+      // Inserts seed entries
+      return knex('projects').insert([
+        {project_name: "Lambda Interview", project_description: "Lambda School web core interview", project_completed: 1},
+        {project_name: "Baseball League", project_description: "Coaching little league baseball"},
+      ]);
+    });
 };

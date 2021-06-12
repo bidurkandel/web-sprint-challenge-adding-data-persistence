@@ -1,6 +1,13 @@
-exports.seed = function(knex, Promise) {
-    return knex('resources').insert([
-        { resource_name: 'keyboard' },
-        { resource_name: 'computer', resource_description: 'Windows PC' }
-    ])
-}
+
+exports.seed = function(knex) {
+  // Deletes ALL existing entries
+  return knex('resources').truncate()
+    .then(function () {
+      // Inserts seed entries
+      return knex('resources').insert([
+        {resource_name: "Baseball Equipment", resource_description: "Includes bats, gloves and balls"},
+        {resource_name: "Lambda Cards", resource_description: "Flashcards with web core concepts"},
+        {resource_name: "Das Keyboard", resource_description: "Mechanical keyboard for better typing experience"},
+      ]);
+    });
+};
